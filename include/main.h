@@ -25,10 +25,10 @@
  * not convenient for most student programmers.
  */
 #include "okapi/api/chassis/controller/chassisController.hpp"
-#include "okapi/api/chassis/controller/chassisControllerPid.hpp"
 #include "okapi/impl/chassis/controller/chassisControllerBuilder.hpp"
 #include "okapi/impl/device/motor/motor.hpp"
 #include "okapi/impl/device/motor/motorGroup.hpp"
+#include "pros/adi.hpp"
 #include <memory>
 #define PROS_USE_SIMPLE_NAMES
 
@@ -78,8 +78,10 @@ std::shared_ptr<ChassisController> drive =
         )
         .build();
 
-MotorGroup arm({-7, 9});
-Motor claw(-8);
+MotorGroup lift({-11, 12});
+Motor claw(20);
+Motor toggler(13);
+pros::adi::Pneumatics alsoClaw('b', false);
 
 /**
  * Prototypes for the competition control tasks are redefined here to ensure

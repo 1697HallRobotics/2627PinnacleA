@@ -39,7 +39,8 @@ void initialize() {
 
 	lv_obj_center(label);
 
-	arm.setBrakeMode(AbstractMotor::brakeMode::hold);
+	lift.setBrakeMode(AbstractMotor::brakeMode::hold);
+	claw.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
 /**
@@ -72,7 +73,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	drive->moveDistance(4_ft);
+	drive->moveDistance(1_ft);
 }
 
 /**
@@ -91,10 +92,15 @@ void autonomous() {
 void opcontrol() {
 	Controller controller;
 
+	bool bWasPressed = false;
 	while (true) {
 		drive->getModel()->arcade(controller.getAnalog(okapi::ControllerAnalog::leftY), controller.getAnalog(okapi::ControllerAnalog::rightX));
-		arm.controllerSet(controller.getDigital(ControllerDigital::L2) ? 1 : controller.getDigital(ControllerDigital::L1) ? -1 : 0);
+		lift.controllerSet(controller.getDigital(ControllerDigital::L2) ? 1 : controller.getDigital(ControllerDigital::L1) ? -1 : 0);
 		claw.controllerSet(controller.getDigital(ControllerDigital::R2) ? 1 : controller.getDigital(ControllerDigital::R1) ? -1 : 0);
+		toggler.controllerSet(controller.getDigital(ControllerDigital::A) ? -1 : 0);
+		if (controller.getDigital(ControllerDigital::B) && !bWasPressed) {
+			alsoClaw.toggle();
+		}
 
 		color_cycle++;
 		if (color_cycle > 50) {
@@ -103,6 +109,8 @@ void opcontrol() {
 			lv_style_set_text_color(&text_style, colors[color_idx]);
 			lv_obj_invalidate(label);
 		}
+
+		bWasPressed = controller.getDigital(ControllerDigital::B);
 
 		pros::delay(10);
 	}

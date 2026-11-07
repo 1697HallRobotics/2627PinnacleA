@@ -63,7 +63,7 @@ using namespace okapi::literals;
 
 std::shared_ptr<ChassisController> drive =
     ChassisControllerBuilder()
-        .withMotors({-3, -1}, {5, 2})
+        .withMotors({-9, -8}, {19, 20})
         .withDimensions({AbstractMotor::gearset::blue, 60.0 / 36.0}, {{3.45_in, 13.0_in}, imev5BlueTPR})
         /*
         .withGains(
@@ -78,8 +78,7 @@ std::shared_ptr<ChassisController> drive =
         )
         .build();
 
-MotorGroup lift({-11, 12});
-Motor claw(20);
+MotorGroup lift({-6, 7});
 Motor toggler(13);
 pros::adi::Pneumatics alsoClaw('b', false);
 

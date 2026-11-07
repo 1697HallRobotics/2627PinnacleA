@@ -40,7 +40,6 @@ void initialize() {
 	lv_obj_center(label);
 
 	lift.setBrakeMode(AbstractMotor::brakeMode::hold);
-	claw.setBrakeMode(AbstractMotor::brakeMode::hold);
 }
 
 /**
@@ -96,7 +95,7 @@ void opcontrol() {
 	while (true) {
 		drive->getModel()->arcade(controller.getAnalog(okapi::ControllerAnalog::leftY), controller.getAnalog(okapi::ControllerAnalog::rightX));
 		lift.controllerSet(controller.getDigital(ControllerDigital::L2) ? 1 : controller.getDigital(ControllerDigital::L1) ? -1 : 0);
-		claw.controllerSet(controller.getDigital(ControllerDigital::R2) ? 1 : controller.getDigital(ControllerDigital::R1) ? -1 : 0);
+		//claw.controllerSet(controller.getDigital(ControllerDigital::R2) ? 1 : controller.getDigital(ControllerDigital::R1) ? -1 : 0);
 		toggler.controllerSet(controller.getDigital(ControllerDigital::A) ? -1 : 0);
 		if (controller.getDigital(ControllerDigital::B) && !bWasPressed) {
 			alsoClaw.toggle();

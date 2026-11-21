@@ -72,7 +72,12 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	drive->moveDistance(1_ft);
+	drive->moveDistance(4.5_ft);
+	drive->turnAngle(100_deg);
+	drive->moveDistance(-0.725_ft);
+	toggler.controllerSet(-1);
+	pros::delay(250);
+	toggler.controllerSet(0);
 }
 
 /**
@@ -95,7 +100,7 @@ void opcontrol() {
 	while (true) {
 		drive->getModel()->arcade(controller.getAnalog(okapi::ControllerAnalog::leftY), controller.getAnalog(okapi::ControllerAnalog::rightX));
 		lift.controllerSet(controller.getDigital(ControllerDigital::L2) ? 1 : controller.getDigital(ControllerDigital::L1) ? -1 : 0);
-		//claw.controllerSet(controller.getDigital(ControllerDigital::R2) ? 1 : controller.getDigital(ControllerDigital::R1) ? -1 : 0);
+		
 		toggler.controllerSet(controller.getDigital(ControllerDigital::A) ? -1 : 0);
 		if (controller.getDigital(ControllerDigital::B) && !bWasPressed) {
 			alsoClaw.toggle();

@@ -24,12 +24,6 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
-#include "okapi/api/chassis/controller/chassisController.hpp"
-#include "okapi/impl/chassis/controller/chassisControllerBuilder.hpp"
-#include "okapi/impl/device/motor/motor.hpp"
-#include "okapi/impl/device/motor/motorGroup.hpp"
-#include "pros/adi.hpp"
-#include <memory>
 #define PROS_USE_SIMPLE_NAMES
 
 /**
@@ -61,10 +55,10 @@
 using namespace okapi;
 using namespace okapi::literals;
 
-std::shared_ptr<ChassisController> drive =
+std::shared_ptr<OdomChassisController> drive =
     ChassisControllerBuilder()
         .withMotors({-9, -8}, {19, 20})
-        .withDimensions({AbstractMotor::gearset::blue, 60.0 / 36.0}, {{3.45_in, 13.0_in}, imev5BlueTPR})
+        .withDimensions({AbstractMotor::gearset::blue, 60.0 / 36.0}, {{3.25_in, 13.0_in}, imev5BlueTPR})
         /*
         .withGains(
             {1.8 / 120000, 1.2 / 120000, 0.9 / 120000}, // Distance controller gains
@@ -72,13 +66,24 @@ std::shared_ptr<ChassisController> drive =
             {1.8 / 120000, 1.2 / 120000, 0.9 / 120000}  // Angle controller gains (helps drive straight)
         )
         */
+        
         .withGains(
             {0.003, 0.0001, 0.0001},
-            {0.000465, 0.0001, 0.0001}
+            {0.000465, 0.0, 0.0001}
         )
-        .build();
+        
+        .withMaxVoltage(7500)
+        /*
+        .withGains(
+            {0.001, 0, 0.0001}, // distance controller gains
+            {0.001, 0, 0.0001}, // turn controller gains
+            {0.001, 0, 0.0001}  // angle controller gains (helps drive straight)
+        )
+            */
+        .withOdometry()
+        .buildOdometry();
 
-MotorGroup lift({-6, 7});
+MotorGroup lift({-10, 18});
 Motor toggler(13);
 pros::adi::Pneumatics alsoClaw('b', false);
 
